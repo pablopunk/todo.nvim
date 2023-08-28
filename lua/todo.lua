@@ -54,6 +54,7 @@ local function toggle_todo_window()
   vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
 
   vim.api.nvim_command("edit" .. todo_file)
+  vim.api.nvim_buf_set_keymap(buf, "n", "q", ":TodoToggle<cr>", { noremap = true, silent = true }) -- make 'q' exit the window
   vim.api.nvim_command "normal G" -- go to EOF
 end
 

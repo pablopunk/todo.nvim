@@ -5,10 +5,19 @@
 ![screencast](./screencast.gif)
 
 This plugin opens a floating window to write quick notes/todo list for your project.
-It will create a `TODO.md` file hidden in the nearest `.git` folder, so every time you
-open a different project you'll only see your notes for that project.
+If you're not on a repo, it wil keep a global file for notes in your home folder.
 
-If you're not on a repo, it wil keep a global `~/TODO.md` file.
+
+## Features
+
+- Toggle a floating window with `:TodoToggle`
+- Use `q` to close the window or call `:TodoToggle` again
+- Project-aware
+  - Automatically create a `TODO.md` file in the nearest `.git` folder
+  - Automatically create a `~/TODO.md` file if you're not in a repo
+- Automatically save the file when you close the floating window
+- Markdown syntax
+
 
 ## Installation
 
@@ -20,6 +29,7 @@ For example using `lazy.nvim`
   config = true, -- initialize it
 }
 ```
+
 
 ## Usage
 
