@@ -16,15 +16,7 @@ end
 
 local buf, win
 
-local function toggle_todo_window()
-  -- check if buf is already open
-  if buf ~= nil and vim.api.nvim_buf_is_valid(buf) then
-    vim.api.nvim_command "w|bd" -- save and close
-    win = nil
-    buf = nil
-    return
-  end
-
+local function open_todo_window()
   buf = vim.api.nvim_create_buf(false, true)
 
   local width = vim.api.nvim_get_option "columns"
@@ -56,6 +48,20 @@ local function toggle_todo_window()
   vim.api.nvim_command("edit" .. todo_file)
   vim.api.nvim_buf_set_keymap(buf, "n", "q", ":TodoToggle<cr>", { noremap = true, silent = true }) -- make 'q' exit the window
   vim.api.nvim_command "normal G" -- go to EOF
+end
+
+local function close_todo_window()
+  vim.api.nvim_command "w|bd" -- save and close
+  win = nil
+  buf = nil
+end
+
+local function toggle_todo_window()
+  if buf ~= nil and vim.api.nvim_buf_is_valid(buf) then
+    close_todo_window()
+  else
+    open_todo_window()
+  end
 end
 
 return {
