@@ -40,7 +40,7 @@ local function open_todo_window()
   vim.api.nvim_win_set_var(win, "float_title", "TODO.md")
 
   local repo_folder = get_todo_folder()
-  local todo_file = repo_folder .. "/TODO.md"
+  local todo_file = repo_folder .. "/.TODO.md"
 
   vim.api.nvim_buf_set_option(buf, "modifiable", true)
   vim.api.nvim_buf_set_option(buf, "filetype", "markdown")

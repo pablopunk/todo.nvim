@@ -13,8 +13,8 @@ If you're not on a repo, it wil keep a global file for notes in your home folder
 - Toggle a floating window with `:TodoToggle`
 - Use `q` to close the window or call `:TodoToggle` again
 - Project-aware
-  - Automatically create a `TODO.md` file in the nearest `.git` folder
-  - Automatically create a `~/TODO.md` file if you're not in a repo
+  - Automatically create a `.git/.TODO.md` file in the nearest parent repo
+  - Automatically create a `~/.TODO.md` file if you're not in a repo
 - Automatically save the file when you close the floating window
 - Markdown syntax
 
@@ -33,7 +33,7 @@ For example using `lazy.nvim`
 
 ## Usage
 
-It will give you a new command `:TodoToggle` to open close the `TODO.md` file. You can map it to whatever you want. I map it to `<leader>t`:
+It will give you a new command `:TodoToggle` to open close the `.TODO.md` file. You can map it to whatever you want. I map it to `<leader>t`:
 
 ```lua
 {
