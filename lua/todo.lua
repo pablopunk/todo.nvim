@@ -42,22 +42,36 @@ local function open_todo_window()
   local repo_folder = get_todo_folder()
   local todo_file = repo_folder .. "/.TODO.md"
 
+  -- setup buffer
   vim.api.nvim_buf_set_option(buf, "modifiable", true)
   vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
 
-  vim.api.nvim_command("edit" .. todo_file)
-  vim.api.nvim_buf_set_keymap(buf, "n", "q", ":TodoToggle<cr>", { noremap = true, silent = true }) -- make 'q' exit the window
+  -- open file
+  vim.api.nvim_command("silent edit" .. todo_file)
   vim.api.nvim_command "normal G" -- go to EOF
+
+  -- setup keymaps
+  local close_window_keymaps = { "q", "<esc>", "<c-c>" }
+  for _, key in ipairs(close_window_keymaps) do
+    vim.api.nvim_command("nnoremap <buffer> <silent> " .. key .. " :lua require('todo').close_todo_window()<cr>")
+  end
+
+  -- when buf loses focus, let's close it
+  vim.api.nvim_command "autocmd BufLeave <buffer> lua require('todo').close_todo_window()"
 end
 
 local function close_todo_window()
-  vim.api.nvim_command "w|bd" -- save and close
+  if win == nil or not vim.api.nvim_win_is_valid(win) then
+    return
+  end
+  vim.api.nvim_set_current_win(win)
+  vim.api.nvim_command "silent w | silent bd" -- save and quit
   win = nil
   buf = nil
 end
 
 local function toggle_todo_window()
-  if buf ~= nil and vim.api.nvim_buf_is_valid(buf) then
+  if buf ~= nil and vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_win_is_valid(win) then
     close_todo_window()
   else
     open_todo_window()
@@ -66,8 +80,10 @@ end
 
 return {
   toggle_todo_window = toggle_todo_window,
+  open_todo_window = open_todo_window,
+  close_todo_window = close_todo_window,
   setup = function()
     -- Create the custom command ":Todo"
-    vim.cmd [[command! TodoToggle :lua require('todo').toggle_todo_window()]]
+    vim.api.nvim_command "command! TodoToggle :lua require('todo').toggle_todo_window()"
   end,
 }
