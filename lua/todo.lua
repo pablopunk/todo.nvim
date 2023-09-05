@@ -49,7 +49,7 @@ end
 
 function TodoWindow:destroy_window()
   vim.api.nvim_set_current_win(self.win)
-  vim.api.nvim_command "silent w | silent bd" -- save and quit
+  vim.cmd "silent w | silent bd" -- save and quit
   self.win = nil
 end
 
@@ -66,19 +66,19 @@ end
 function TodoWindow:open_file()
   local repo_folder = self:get_todo_folder()
   local todo_file = repo_folder .. "/.TODO.md"
-  vim.api.nvim_command("silent edit" .. todo_file)
-  vim.api.nvim_command "normal G" -- go to EOF
+  vim.cmd("silent edit" .. todo_file)
+  vim.cmd "normal G" -- go to EOF
 end
 
 function TodoWindow:setup_keymaps()
   local close_window_keymaps = { "q", "<esc>", "<c-c>" }
   for _, key in ipairs(close_window_keymaps) do
-    vim.api.nvim_command("nnoremap <buffer> <silent> " .. key .. " :" .. close_window_vim_cmd .. "<cr>")
+    vim.cmd("nnoremap <buffer> <silent> " .. key .. " :" .. close_window_vim_cmd .. "<cr>")
   end
 end
 
 function TodoWindow:setup_autocmds()
-  vim.api.nvim_command("autocmd BufLeave <buffer> " .. close_window_vim_cmd)
+  vim.cmd("autocmd BufLeave <buffer> " .. close_window_vim_cmd)
 end
 
 function TodoWindow:open_todo_window()
@@ -123,6 +123,6 @@ return {
     todo_window:close_todo_window()
   end,
   setup = function()
-    vim.api.nvim_command "command! TodoToggle :lua require('todo').toggle_todo_window()"
+    vim.cmd "command! TodoToggle :lua require('todo').toggle_todo_window()"
   end,
 }
