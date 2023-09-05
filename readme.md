@@ -30,14 +30,14 @@ For example using `lazy.nvim`
 ```lua
 {
   "pablopunk/todo.nvim",
-  config = true, -- initialize it
+  config = true, -- initialize it. equivalent to require("todo").setup({}) in lazy.vim
 }
 ```
 
 
 ## Usage
 
-It will give you a new command `:TodoToggle` to open close the `.TODO.md` file. You can map it to whatever you want. I map it to `<leader>t`:
+It will give you a new command `:TodoToggle` to open/close the `.TODO.md` file. You can map it to whatever you want. I map it to `<leader>t`:
 
 ```lua
 {
