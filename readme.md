@@ -25,12 +25,12 @@ If you're not on a repo, it wil keep a global file for notes in your home folder
 
 ## Installation
 
-For example using `lazy.nvim`
+For example using `lazy.nvim`:
 
 ```lua
 {
   "pablopunk/todo.nvim",
-  config = true, -- initialize it. equivalent to require("todo").setup({}) in lazy.vim
+  config = true, -- initialize it. equivalent to require("todo").setup() in lazy.vim
 }
 ```
 
@@ -43,7 +43,7 @@ It will give you a new command `:TodoToggle` to open/close the `.TODO.md` file. 
 {
   "pablopunk/todo.nvim",
   config = function()
-    require("todo").setup {}
+    require("todo").setup()
     vim.keymap.set("n", "<leader>t", "<cmd>TodoToggle<cr>", { silent = true })
   end,
 }
