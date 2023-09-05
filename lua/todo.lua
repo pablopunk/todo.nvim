@@ -60,8 +60,12 @@ local function open_todo_window()
   vim.api.nvim_command "autocmd BufLeave <buffer> lua require('todo').close_todo_window()"
 end
 
+local function is_window_invalid()
+  return win == nil or not vim.api.nvim_win_is_valid(win)
+end
+
 local function close_todo_window()
-  if win == nil or not vim.api.nvim_win_is_valid(win) then
+  if is_window_invalid() then
     return
   end
   vim.api.nvim_set_current_win(win)
@@ -70,8 +74,12 @@ local function close_todo_window()
   buf = nil
 end
 
+local is_window_open = function()
+  return buf ~= nil and vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_win_is_valid(win)
+end
+
 local function toggle_todo_window()
-  if buf ~= nil and vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_win_is_valid(win) then
+  if is_window_open() then
     close_todo_window()
   else
     open_todo_window()
