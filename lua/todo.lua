@@ -49,11 +49,12 @@ end
 
 function TodoWindow:destroy_window()
   vim.api.nvim_set_current_win(self.win)
-  vim.cmd "silent w | silent bd" -- save and quit
+  vim.cmd "silent w" -- save before closing
   self.win = nil
 end
 
 function TodoWindow:destroy_buffer()
+  vim.cmd "silent bd" -- delete buffer
   self.buf = nil
 end
 
@@ -78,7 +79,13 @@ function TodoWindow:setup_keymaps()
 end
 
 function TodoWindow:setup_autocmds()
-  vim.cmd("autocmd BufLeave <buffer> " .. close_window_vim_cmd)
+  vim.api.nvim_create_autocmd("BufLeave", {
+    group = vim.api.nvim_create_augroup("TodoNvim", { clear = true }),
+    pattern = "<buffer>",
+    callback = function()
+      self:close_todo_window()
+    end,
+  })
 end
 
 function TodoWindow:open_todo_window()
