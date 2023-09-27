@@ -42,10 +42,7 @@ It will give you a new command `:TodoToggle` to open/close the `.TODO.md` file. 
 ```lua
 {
   "pablopunk/todo.nvim",
-  config = function()
-    require("todo").setup()
-    vim.keymap.set("n", "<leader>t", "<cmd>TodoToggle<cr>", { silent = true })
-  end,
+  opts = { map = "<leader>t" } -- same as .setup({...})
 }
 ```
 

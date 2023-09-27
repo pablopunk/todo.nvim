@@ -129,7 +129,10 @@ return {
   close_todo_window = function()
     todo_window:close_todo_window()
   end,
-  setup = function()
+  setup = function(opts)
     vim.cmd "command! TodoToggle :lua require('todo').toggle_todo_window()"
+    if opts ~= nil and opts.map ~= nil then
+      vim.keymap.set("n", opts.map, "<cmd>TodoToggle<cr>", { silent = true, desc = "Open todo.nvim" })
+    end
   end,
 }
