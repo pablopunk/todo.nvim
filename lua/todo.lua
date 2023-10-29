@@ -5,6 +5,7 @@ function TodoWindow.new()
   local self = setmetatable({}, TodoWindow)
   self.buf = nil
   self.win = nil
+  self.todo_folder = nil
   return self
 end
 
@@ -27,8 +28,8 @@ end
 local close_window_vim_cmd = "lua require('todo').close_todo_window()"
 
 function TodoWindow:create_window()
-  local width = vim.api.nvim_get_option "columns"
-  local height = vim.api.nvim_get_option "lines"
+  local width = vim.api.nvim_get_option_value("columns", {})
+  local height = vim.api.nvim_get_option_value("lines", {})
   local win_height = math.ceil(height * 0.5 - 4)
   local win_width = math.ceil(width * 0.5)
   local row = math.ceil((height - win_height) / 2 - 1)
@@ -41,7 +42,7 @@ function TodoWindow:create_window()
     row = row,
     col = col,
     border = "rounded",
-    title = "todo.nvim",
+    title = vim.fn.fnamemodify(self.todo_folder, ":h:t") .. " - TODO",
     title_pos = "center",
   }
   self.win = vim.api.nvim_open_win(self.buf, true, opts)
@@ -60,13 +61,12 @@ end
 
 function TodoWindow:create_buffer()
   self.buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_option(self.buf, "modifiable", true)
-  vim.api.nvim_buf_set_option(self.buf, "filetype", "markdown")
+  vim.api.nvim_set_option_value("modifiable", true, { buf = self.buf })
+  vim.api.nvim_set_option_value("filetype", "markdown", { buf = self.buf })
 end
 
 function TodoWindow:open_file()
-  local repo_folder = self:get_todo_folder()
-  local todo_file = repo_folder .. "/.TODO.md"
+  local todo_file = self.todo_folder .. "/.TODO.md"
   vim.cmd("silent edit" .. todo_file)
   vim.cmd "normal G" -- go to EOF
 end
@@ -89,6 +89,7 @@ function TodoWindow:setup_autocmds()
 end
 
 function TodoWindow:open_todo_window()
+  self.todo_folder = self:get_todo_folder()
   self:create_buffer()
   self:create_window()
   self:open_file()
