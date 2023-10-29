@@ -34,6 +34,11 @@ function TodoWindow:create_window()
   local win_width = math.ceil(width * 0.5)
   local row = math.ceil((height - win_height) / 2 - 1)
   local col = math.ceil((width - win_width) / 2)
+  local title = vim.fn.fnamemodify(self.todo_folder, ":h:t") .. " - TODO"
+  if self.todo_folder == "~" then
+    title = "TODO"
+  end
+
   local opts = {
     style = "minimal",
     relative = "editor",
@@ -42,7 +47,7 @@ function TodoWindow:create_window()
     row = row,
     col = col,
     border = "rounded",
-    title = vim.fn.fnamemodify(self.todo_folder, ":h:t") .. " - TODO",
+    title = title,
     title_pos = "center",
   }
   self.win = vim.api.nvim_open_win(self.buf, true, opts)
